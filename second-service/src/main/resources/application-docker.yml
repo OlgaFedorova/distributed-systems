@@ -1,0 +1,8 @@
+opentracing:
+  jaeger:
+    udp-sender:
+      host: jaeger
+      port: 6831
+
+first-service:
+  url: http://first-service:8080/first-service

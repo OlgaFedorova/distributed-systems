@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /first-service
+
+opentracing:
+  jaeger:
+    service-name: first-service
+    enabled: true
+    udp-sender:
+      host: localhost
+      port: 6831
