@@ -112,3 +112,7 @@ hs_err_pid*
 
 /.idea/*
 /distributed-systems.iml
+/first-service-with-sleuth/first-service-with-sleuth.iml
+/first-service/first-service.iml
+/second-service/second-service.iml
+/second-service-with-sleuth/second-service-with-sleuth.iml

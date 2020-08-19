@@ -1,0 +1,10 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /first-service-with-sleuth
+
+spring:
+  zipkin:
+    service:
+      name: first-service-with-sleuth
+    base-url: http://localhost:9411

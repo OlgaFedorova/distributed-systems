@@ -1,11 +1,5 @@
 package ofedorova.resources;
 
-import feign.Client;
-import feign.Feign;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
-import feign.opentracing.TracingClient;
-import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +22,10 @@ public class GreetingController {
     @Autowired
     public GreetingController(RestTemplate restTemplate,
                               @Value("${first-service.url}") String firstServiceUrl,
-                              Decoder decoder,
-                              Encoder encoder,
-                              Client client,
-                              Tracer tracer) {
+                              GreetingProxy greetingProxy) {
         this.restTemplate = restTemplate;
         this.firstServiceUrl = firstServiceUrl;
-        this.greetingProxy = Feign.builder().client(new TracingClient(client, tracer))
-                .encoder(encoder)
-                .decoder(decoder)
-                .target(GreetingProxy.class, firstServiceUrl);
+        this.greetingProxy = greetingProxy;
     }
 
     @GetMapping("/hello")

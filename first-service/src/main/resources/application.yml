@@ -10,3 +10,6 @@ opentracing:
     udp-sender:
       host: localhost
       port: 6831
+spring:
+  application:
+    name: first-service

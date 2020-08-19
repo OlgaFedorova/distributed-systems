@@ -1,0 +1,21 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /second-service-with-sleuth
+
+spring:
+  zipkin:
+    service:
+      name: second-service-with-sleuth
+    base-url: http://localhost:9411
+
+first-service:
+  url: http://localhost:8082/first-service-with-sleuth
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic

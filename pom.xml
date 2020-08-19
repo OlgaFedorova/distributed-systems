@@ -25,10 +25,16 @@
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <io.github.openfeign.opentracing.version>0.3.0</io.github.openfeign.opentracing.version>
         <io.github.openfeign.version>11.0</io.github.openfeign.version>
+        <opentracing-spring-cloud.version>0.5.6</opentracing-spring-cloud.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-cloud-starter</artifactId>
+                <version>${opentracing-spring-cloud.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
@@ -44,7 +50,7 @@
             <dependency>
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-spring-cloud-feign-starter</artifactId>
-                <version>${opentracing-spring-cloud-feign.version}</version>
+                <version>${opentracing-spring-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.openfeign.opentracing</groupId>
@@ -67,6 +73,8 @@
     <modules>
         <module>first-service</module>
         <module>second-service</module>
+        <module>first-service-with-sleuth</module>
+        <module>second-service-with-sleuth</module>
     </modules>
 
 </project>

@@ -1,0 +1,6 @@
+spring:
+  zipkin:
+    base-url: http://jaeger:9411
+
+first-service:
+  url: http://first-service-with-sleuth:8082/first-service-with-sleuth
