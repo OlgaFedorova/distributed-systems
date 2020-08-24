@@ -1,4 +1,4 @@
-###### Settings
+#### Settings
 Add in .m2\settings.xml
 ```xml
  <pluginGroups>
@@ -7,34 +7,43 @@ Add in .m2\settings.xml
 ```
 
 
-###### Build
+#### Build
 - build docker images
 ```bash
 mvn clean install docker:build
 ```
 
-###### Run
+#### Run
 ```
 docker-compose -f docker-compose.yaml up -d
 docker-compose -f docker-compose.yaml ps
 docker-compose -f docker-compose.yaml down
 ```
 
-###### Environment
+#### Environment
 - Jaeger console:  http://localhost:16686
+
 - First service: http://localhost:8080/first-service
+    - Swagger: http://localhost:8080/first-service/swagger-ui/index.html
     - GET: http://localhost:8080/first-service/greeting/hello  
+    - POST: http://localhost:8080/first-service/message-queue
+    - GET: http://localhost:8080/first-service/message-queue
 - Second service: http://localhost:8081/second-service
+    - Swagger: ttp://localhost:8081/second-service/swagger-ui/index.html
     - GET: http://localhost:8081/second-service/greeting/hello
     - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-rest-template
     - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-feign
     
 - First service with the sleuth: http://localhost:8082/first-service-with-sleuth
+    - Swagger: http://localhost:8082/first-service-with-sleuth/swagger-ui/index.html
     - GET: http://localhost:8082/first-service-with-sleuth/greeting/hello  
 - Second service with the sleuth: http://localhost:8084/second-service-with-sleuth
+    - Swagger: http://localhost:8084/second-service-with-sleuth/swagger-ui/index.html
     - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello
     - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
     - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-feign    
+
+#### Tracing
     
 ###### Opentracing    
 
@@ -271,3 +280,7 @@ public void onRequest(HttpServletRequest httpServletRequest, Span span) {
 Плюсы:
 - Поддерживает трассировку вызовов через RestTemplate и Feign client
 - Добавляет в сообщение логов информацию о сервисе и traceId, что удобно для использования EFK стэка
+
+#### Redis
+
+docker run -it --network distributed --rm redis redis-cli -h some-redis

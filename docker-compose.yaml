@@ -1,5 +1,11 @@
 version: "3"
 services:
+  redis:
+    image: library/redis:6.0
+    ports:
+    - 6379:6379
+    networks:
+      - distributed
   jaeger:
     image: jaegertracing/all-in-one:1.18.1
     environment:
@@ -20,8 +26,10 @@ services:
     image: olgafedorova/first-service
     links:
       - jaeger
+      - redis
     depends_on:
       - jaeger
+      - redis
     ports:
       - 8080:8080
     networks:

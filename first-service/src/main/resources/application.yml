@@ -13,3 +13,6 @@ opentracing:
 spring:
   application:
     name: first-service
+  redis:
+    host: localhost
+    port: 6379

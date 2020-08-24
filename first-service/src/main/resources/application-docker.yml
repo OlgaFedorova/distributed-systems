@@ -3,3 +3,8 @@ opentracing:
     udp-sender:
       host: jaeger
       port: 6831
+spring:
+  redis:
+    host: redis
+    port: 6379
+
