@@ -116,7 +116,7 @@
                                     <tag>latest</tag>
                                 </tags>
                                 <ports>
-                                    <port>5000</port>
+                                    <port>8081</port>
                                 </ports>
                             </build>
                             <run>

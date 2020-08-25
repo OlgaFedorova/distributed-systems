@@ -20,29 +20,6 @@ docker-compose -f docker-compose.yaml ps
 docker-compose -f docker-compose.yaml down
 ```
 
-#### Environment
-- Jaeger console:  http://localhost:16686
-
-- First service: http://localhost:8080/first-service
-    - Swagger: http://localhost:8080/first-service/swagger-ui/index.html
-    - GET: http://localhost:8080/first-service/greeting/hello  
-    - POST: http://localhost:8080/first-service/message-queue
-    - GET: http://localhost:8080/first-service/message-queue
-- Second service: http://localhost:8081/second-service
-    - Swagger: ttp://localhost:8081/second-service/swagger-ui/index.html
-    - GET: http://localhost:8081/second-service/greeting/hello
-    - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-rest-template
-    - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-feign
-    
-- First service with the sleuth: http://localhost:8082/first-service-with-sleuth
-    - Swagger: http://localhost:8082/first-service-with-sleuth/swagger-ui/index.html
-    - GET: http://localhost:8082/first-service-with-sleuth/greeting/hello  
-- Second service with the sleuth: http://localhost:8084/second-service-with-sleuth
-    - Swagger: http://localhost:8084/second-service-with-sleuth/swagger-ui/index.html
-    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello
-    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
-    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-feign    
-
 #### Tracing
     
 ###### Opentracing    
@@ -284,3 +261,72 @@ public void onRequest(HttpServletRequest httpServletRequest, Span span) {
 #### Redis
 
 docker run -it --network distributed --rm redis redis-cli -h some-redis
+
+#### OpenShift with minishift
+- To  start  the  OpenShift  cluster:
+```minishift start```
+OpenShift: https://192.168.64.2:8443/console
+User:     developer       
+Password: developer   
+
+- To  shut  down  the  OpenShift  cluster:
+```minishift  stop```
+
+- Restart the  OpenShift  cluster (All your work will be restored on a restart):
+ ```minishift start`` 
+ 
+- To delete the OpenShift cluster:
+ ```minishift delete```
+ 
+- Run the command to output instructions on how to set up your shell environment so it can find the oc program:
+```minishift oc-env```
+
+To login as administrator:       
+```oc login -u system:admin```
+
+#### Environment
+###### Localhost:
+- Jaeger console:  http://localhost:16686
+
+- First service: http://localhost:8080/first-service
+    - Swagger: http://localhost:8080/first-service/swagger-ui.html
+    - GET: http://localhost:8080/first-service/greeting/hello  
+    - POST: http://localhost:8080/first-service/message-queue
+    - GET: http://localhost:8080/first-service/message-queue
+- Second service: http://localhost:8081/second-service
+    - Swagger: http://localhost:8081/second-service/swagger-ui.html
+    - GET: http://localhost:8081/second-service/greeting/hello
+    - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-rest-template
+    - GET: http://localhost:8081/second-service/greeting/hello-from-first-service-with-feign
+    
+- First service with the sleuth: http://localhost:8082/first-service-with-sleuth
+    - Swagger: http://localhost:8082/first-service-with-sleuth/swagger-ui.html
+    - GET: http://localhost:8082/first-service-with-sleuth/greeting/hello  
+- Second service with the sleuth: http://localhost:8084/second-service-with-sleuth
+    - Swagger: http://localhost:8084/second-service-with-sleuth/swagger-ui.html
+    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello
+    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
+    - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-feign   
+    
+###### OpenShift:
+- Jaeger console:  http://jaeger-distributed-systems.192.168.64.2.nip.io/
+
+- First service: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service
+    - Swagger: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/swagger-ui.html
+    - GET: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/greeting/hello  
+    - POST: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/message-queue
+    - GET: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/message-queue
+- Second service: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service
+    - Swagger: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/swagger-ui.html
+    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello
+    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello-from-first-service-with-rest-template
+    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello-from-first-service-with-feign
+    
+- First service with the sleuth: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth
+    - Swagger: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth/swagger-ui.html
+    - GET: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth/greeting/hello  
+- Second service with the sleuth: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth
+    - Swagger: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/swagger-ui.html
+    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello
+    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
+    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello-from-first-service-with-feign        

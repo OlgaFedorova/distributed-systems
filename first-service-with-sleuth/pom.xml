@@ -96,7 +96,7 @@
                                     <tag>latest</tag>
                                 </tags>
                                 <ports>
-                                    <port>5000</port>
+                                    <port>8082</port>
                                 </ports>
                             </build>
                             <run>
