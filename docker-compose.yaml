@@ -22,11 +22,46 @@ services:
     restart: on-failure
     networks:
       - distributed
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - 9200:9200
+    networks:
+      - distributed
+  kibana:
+    image: kibana:7.2.0
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+    networks:
+      - distributed
+  fluentd:
+    build: ./fluentd
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      - distributed
   first-service:
     image: olgafedorova/first-service
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
     links:
       - jaeger
       - redis
+      - fluentd
     depends_on:
       - jaeger
       - redis

@@ -262,27 +262,29 @@ public void onRequest(HttpServletRequest httpServletRequest, Span span) {
 
 docker run -it --network distributed --rm redis redis-cli -h some-redis
 
-#### OpenShift with minishift
+#### OpenShift with Red Hat CodeReady Containers
 - To  start  the  OpenShift  cluster:
-```minishift start```
-OpenShift: https://192.168.64.2:8443/console
+```crc start -p OpenShiftSecret/pull-secret.txt```
+
+OpenShift: https://oauth-openshift.apps-crc.testing/
 User:     developer       
-Password: developer   
+Password: developer 
+
+- Set up your shell environment to find the oc program:
+```eval $(crc oc-env)```
 
 - To  shut  down  the  OpenShift  cluster:
-```minishift  stop```
+```crc  stop```
 
-- Restart the  OpenShift  cluster (All your work will be restored on a restart):
- ```minishift start`` 
- 
-- To delete the OpenShift cluster:
- ```minishift delete```
- 
-- Run the command to output instructions on how to set up your shell environment so it can find the oc program:
-```minishift oc-env```
 
-To login as administrator:       
-```oc login -u system:admin```
+#### Adding Self-signed Registry Certs to Docker & Docker for Mac
+```
+oc login -u kubeadmin -p ILWgF-VfgcQ-p6mJ4-Jztez https://api.crc.testing:6443  
+oc extract secret/router-ca --keys=tls.crt -n openshift-ingress-operator
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain tls.crt
+oc login -u developer -p developer https://api.crc.testing:6443
+docker login -u developer -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
+```
 
 #### Environment
 ###### Localhost:
@@ -309,24 +311,24 @@ To login as administrator:
     - GET: http://localhost:8084/second-service-with-sleuth/greeting/hello-from-first-service-with-feign   
     
 ###### OpenShift:
-- Jaeger console:  http://jaeger-distributed-systems.192.168.64.2.nip.io/
+- Jaeger console:  http://jaeger-distributed-systems.apps-crc.testing
 
-- First service: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service
-    - Swagger: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/swagger-ui.html
-    - GET: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/greeting/hello  
-    - POST: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/message-queue
-    - GET: http://first-service-distributed-systems.192.168.64.2.nip.io/first-service/message-queue
-- Second service: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service
-    - Swagger: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/swagger-ui.html
-    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello
-    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello-from-first-service-with-rest-template
-    - GET: http://second-service-distributed-systems.192.168.64.2.nip.io/second-service/greeting/hello-from-first-service-with-feign
+- First service: http://first-service-distributed-systems.apps-crc.testing/first-service
+    - Swagger: http://first-service-distributed-systems.apps-crc.testing/first-service/swagger-ui.html
+    - GET: http://first-service-distributed-systems.apps-crc.testing/first-service/greeting/hello  
+    - POST: http://first-service-distributed-systems.apps-crc.testing/first-service/message-queue
+    - GET: http://first-service-distributed-systems.apps-crc.testing/first-service/message-queue
+- Second service: http://second-service-distributed-systems.apps-crc.testing/second-service
+    - Swagger: http://second-service-distributed-systems.apps-crc.testing/second-service/swagger-ui.html
+    - GET: http://second-service-distributed-systems.apps-crc.testing/second-service/greeting/hello
+    - GET: http://second-service-distributed-systems.apps-crc.testing/second-service/greeting/hello-from-first-service-with-rest-template
+    - GET: http://second-service-distributed-systems.apps-crc.testing/second-service/greeting/hello-from-first-service-with-feign
     
-- First service with the sleuth: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth
-    - Swagger: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth/swagger-ui.html
-    - GET: http://first-service-with-sleuth-distributed-systems.192.168.64.2.nip.io//first-service-with-sleuth/greeting/hello  
-- Second service with the sleuth: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth
-    - Swagger: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/swagger-ui.html
-    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello
-    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
-    - GET: http://second-service-with-sleuth-distributed-systems.192.168.64.2.nip.io/second-service-with-sleuth/greeting/hello-from-first-service-with-feign        
+- First service with the sleuth: http://first-service-with-sleuth-distributed-systems.apps-crc.testing/first-service-with-sleuth
+    - Swagger: http://first-service-with-sleuth-distributed-systems.apps-crc.testing/first-service-with-sleuth/swagger-ui.html
+    - GET: http://first-service-with-sleuth-distributed-systems.apps-crc.testing/first-service-with-sleuth/greeting/hello  
+- Second service with the sleuth: http://second-service-with-sleuth-distributed-systems.apps-crc.testing/second-service-with-sleuth
+    - Swagger: http://second-service-with-sleuth-distributed-systems.apps-crc.testing/second-service-with-sleuth/swagger-ui.html
+    - GET: http://second-service-with-sleuth-distributed-systems.apps-crc.testing/second-service-with-sleuth/greeting/hello
+    - GET: http://second-service-with-sleuth-distributed-systems.apps-crc.testing/second-service-with-sleuth/greeting/hello-from-first-service-with-rest-template
+    - GET: http://second-service-with-sleuth-distributed-systems.apps-crc.testing/second-service-with-sleuth/greeting/hello-from-first-service-with-feign        

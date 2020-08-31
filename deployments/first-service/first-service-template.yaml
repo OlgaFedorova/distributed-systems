@@ -8,28 +8,12 @@ metadata:
     description: Template for the Container first-service
 objects:
   - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      annotations:
-        description: Container first-service image stream
-      labels:
-        name: first-service
-      name: first-service
-    spec:
-      tags:
-      - annotations:
-        from:
-          kind: DockerImage
-          name: olgafedorova/first-service:latest
-        name: latest
-        importPolicy: {}
-  - apiVersion: v1
     kind: Service
     metadata:
       labels:
         name: first-service
-        service: first-service
-      name: first-service
+        service: ${SERVICE_NAME}
+      name: ${SERVICE_NAME}
       annotations:
         description: "The Container first-service service"
     spec:
@@ -39,27 +23,27 @@ objects:
           targetPort: 8080
           protocol: TCP  
       selector:
-        name: first-service
+        name: ${SERVICE_NAME}
       type: ClusterIP
   - apiVersion: v1
     kind: Route
     metadata:
       labels:
         name: first-service
-      name: first-service
+      name: ${SERVICE_NAME}
       annotations:
         description: "The route to expose the Container first-service's 8080 port"
     spec:
-      host: first-service-distributed-systems.192.168.64.2.nip.io
+      host: ${SERVICE_NAME}-${NAMESPACE}.${CLUSTER_URL}
       to:
         kind: Service
-        name: first-service
+        name: ${SERVICE_NAME}
       port:
         targetPort: 8080-tcp
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
-      name: first-service
+      name: ${SERVICE_NAME}
       labels:
         name: first-service
       annotations:
@@ -75,23 +59,23 @@ objects:
           imageChangeParams:
             automatic: true
             containerNames:
-              - first-service
+              - ${SERVICE_NAME}
             from:
               kind: ImageStreamTag
-              name: "first-service:latest"
-      replicas: 1
+              name: "${SERVICE_NAME}:${VERSION}"
+      replicas: 2
       selector:
-        name: first-service
-        deploymentconfig: first-service
+        name: ${SERVICE_NAME}
+        deploymentconfig: ${SERVICE_NAME}
       template:
         metadata:
           labels:
             name: first-service
-            deploymentconfig: first-service
+            deploymentconfig: ${SERVICE_NAME}
         spec:
           containers:
-            - name: first-service
-              image: "olgafedorova/first-service:latest"
+            - name: ${SERVICE_NAME}
+              image: "${NAMESPACE}/${SERVICE_NAME}:${VERSION}"
               imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -105,3 +89,16 @@ objects:
           terminationGracePeriodSeconds: 60
         test: false
       status: {}
+parameters:
+  - name: CLUSTER_URL
+    description: "Cluster url"
+    value: apps-crc.testing
+  - name: NAMESPACE
+    description: "Name space"
+    value: distributed-systems
+  - name: SERVICE_NAME
+    description: "Service name"
+    value: first-service
+  - name: VERSION
+    description: "Version of Jaeger"
+    required: true

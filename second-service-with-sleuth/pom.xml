@@ -5,7 +5,7 @@
     <parent>
         <artifactId>distributed-systems</artifactId>
         <groupId>ofedorova</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,7 +51,7 @@
     </dependencies>
 
     <build>
-        <finalName>second-service-with-sleuth</finalName>
+        <finalName>second-service-with-sleuth-${revision}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -80,7 +80,7 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>olgafedorova/${project.build.finalName}</name>
+                            <name>${docker.registry.namespace}/${artifactId}</name>
                             <build>
                                 <from>openjdk:8-jdk</from>
                                 <entryPoint>java -Dspring.profiles.active=docker -jar /application/${project.build.finalName}.jar</entryPoint>
@@ -97,7 +97,7 @@
                                     </inline>
                                 </assembly>
                                 <tags>
-                                    <tag>latest</tag>
+                                    <tag>${revision}</tag>
                                 </tags>
                                 <ports>
                                     <port>8084</port>
@@ -106,7 +106,7 @@
                             <run>
                                 <namingStrategy>alias</namingStrategy>
                             </run>
-                            <alias>${project.build.finalName}</alias>
+                            <alias>${artifactId}</alias>
                         </image>
                     </images>
                 </configuration>
