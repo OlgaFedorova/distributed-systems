@@ -286,6 +286,21 @@ oc login -u developer -p developer https://api.crc.testing:6443
 docker login -u developer -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
 ```
 
+#### Connection between services in different projects
+If  you  need  to  be  able  to  access  a  backend  application  or  database from a different project,
+you will need to use a qualified hostname that incorporates the name of the project.
+The format for the fully qualified hostname is:
+```
+<service-name>.<project-name>.svc.cluster.local
+```
+
+To  open  up  access  between  projects  you  can  use  the command:
+```
+oc admpod-network
+```
+
+#### Copying Data from a Volume to local
+
 #### Environment
 ###### Localhost:
 - Jaeger console:  http://localhost:16686

@@ -4,19 +4,26 @@ mvn clean install docker:build -Drevision=$VERSION
 oc login -u developer -p developer https://api.crc.testing:6443
 docker login -u developer -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
 
-docker image tag olgafedorova/first-service:$VERSION default-route-openshift-image-registry.apps-crc.testing/distributed-systems/first-service:$VERSION
-docker push default-route-openshift-image-registry.apps-crc.testing/distributed-systems/first-service:$VERSION
+cd deployments
 
-docker image tag olgafedorova/second-service:$VERSION default-route-openshift-image-registry.apps-crc.testing/distributed-systems/second-service:$VERSION
-docker push default-route-openshift-image-registry.apps-crc.testing/distributed-systems/second-service:$VERSION
+cd first-service
+sh first-service-push-image.sh $VERSION
+sh first-service-redeploy.sh $VERSION
+cd ..
 
-docker image tag olgafedorova/first-service-with-sleuth:$VERSION default-route-openshift-image-registry.apps-crc.testing/distributed-systems/first-service-with-sleuth:$VERSION
-docker push default-route-openshift-image-registry.apps-crc.testing/distributed-systems/first-service-with-sleuth:$VERSION
+cd second-service
+sh second-service-push-image.sh $VERSION
+sh second-service-redeploy.sh $VERSION
+cd ..
 
-docker image tag olgafedorova/second-service-with-sleuth:$VERSION default-route-openshift-image-registry.apps-crc.testing/distributed-systems/second-service-with-sleuth:$VERSION
-docker push default-route-openshift-image-registry.apps-crc.testing/distributed-systems/second-service-with-sleuth:$VERSION
+cd first-service-with-sleuth
+sh first-service-with-sleuth-push-image.sh $VERSION
+sh first-service-with-sleuth-redeploy.sh $VERSION
+cd ..
 
-oc process container-first-service-template -p VERSION=$VERSION | oc apply -f -
-oc process container-second-service-template -p VERSION=$VERSION | oc apply -f -
-oc process container-first-service-with-sleuth-template -p VERSION=$VERSION | oc apply -f -
-oc process container-second-service-with-sleuth-template -p VERSION=$VERSION | oc apply -f -
+cd second-service-with-sleuth
+sh second-service-with-sleuth-push-image.sh $VERSION
+sh second-service-with-sleuth-redeploy.sh $VERSION
+cd ..
+
+cd ..

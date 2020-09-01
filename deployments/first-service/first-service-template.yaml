@@ -40,6 +40,50 @@ objects:
         name: ${SERVICE_NAME}
       port:
         targetPort: 8080-tcp
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: first-service-simple-config-map
+    data:
+      TEST_CONF_MAP1: ${TEST_CONF_MAP1}
+      TEST_CONF_MAP2: ${TEST_CONF_MAP2}
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: fist-service-settings-file
+    data:
+      first-service-settings.json: |-
+        {
+          "NAME": "${SERVICE_NAME}",
+          "Description": "${SERVICE_NAME}"
+        }
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: first-service-secrets
+    data:
+      TEST_SECRET_CONF_MAP1: "${TEST_SECRET_CONF_MAP1}"
+      TEST_SECRET_CONF_MAP2: "${TEST_SECRET_CONF_MAP2}"
+    type: Opaque
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: first-service-secret-file
+    data:
+      secret.txt: SGVsbG8gZnJvbSBTZWNyZXQtZmlsZQ==
+    type: Opaque
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: first-service-data
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Mi
+      volumeName: pv0028
+      volumeMode: Filesystem
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -73,10 +117,55 @@ objects:
             name: first-service
             deploymentconfig: ${SERVICE_NAME}
         spec:
+          volumes:
+            - name: first-service-settings-volume
+              configMap:
+                name: fist-service-settings-file
+                defaultMode: 420
+            - name: first-service-secret-volume
+              secret:
+                secretName: first-service-secret-file
+                defaultMode: 420
+            - name: first-service-data
+              persistentVolumeClaim:
+                claimName: first-service-data
           containers:
             - name: ${SERVICE_NAME}
               image: "${NAMESPACE}/${SERVICE_NAME}:${VERSION}"
               imagePullPolicy: Always
+              env:
+                - name: TEST_ENV_VARIABLE
+                  value: ${TEST_ENV_VARIABLE}
+                - name: TEST_CONF_MAP1
+                  valueFrom:
+                    configMapKeyRef:
+                      name: first-service-simple-config-map
+                      key: TEST_CONF_MAP1
+                - name: TEST_CONF_MAP2
+                  valueFrom:
+                    configMapKeyRef:
+                      name: first-service-simple-config-map
+                      key: TEST_CONF_MAP2
+                - name: TEST_SECRET_CONF_MAP1
+                  valueFrom:
+                    secretKeyRef:
+                      name: first-service-secrets
+                      key: TEST_SECRET_CONF_MAP1
+                - name: TEST_SECRET_CONF_MAP2
+                  valueFrom:
+                    secretKeyRef:
+                      name: first-service-secrets
+                      key: TEST_SECRET_CONF_MAP2
+              resources:
+                limits:
+                  memory: 512Mi
+              volumeMounts:
+                - name: first-service-settings-volume
+                  mountPath: /application/settings
+                - name: first-service-secret-volume
+                  mountPath: /application/secret
+                - name: first-service-data
+                  mountPath: /application/media
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -102,3 +191,10 @@ parameters:
   - name: VERSION
     description: "Version of Jaeger"
     required: true
+  - name: TEST_ENV_VARIABLE
+    description: Test environment variable
+    required: true
+  - name: TEST_CONF_MAP1
+  - name: TEST_CONF_MAP2
+  - name: TEST_SECRET_CONF_MAP1
+  - name: TEST_SECRET_CONF_MAP2

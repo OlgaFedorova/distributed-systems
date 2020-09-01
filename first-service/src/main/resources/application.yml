@@ -16,3 +16,9 @@ spring:
   redis:
     host: localhost
     port: 6379
+
+test.env.variables: ${TEST_ENV_VARIABLE}
+test.conf.map1: ${TEST_CONF_MAP1}
+test.conf.map2: ${TEST_CONF_MAP2}
+test.secret.conf.map1: ${TEST_SECRET_CONF_MAP1}
+test.secret.conf.map2: ${TEST_SECRET_CONF_MAP2}
