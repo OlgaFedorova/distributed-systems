@@ -22,3 +22,7 @@ test.conf.map1: ${TEST_CONF_MAP1}
 test.conf.map2: ${TEST_CONF_MAP2}
 test.secret.conf.map1: ${TEST_SECRET_CONF_MAP1}
 test.secret.conf.map2: ${TEST_SECRET_CONF_MAP2}
+
+file.path.settings: /application/settings
+file.path.secret: /application/secret
+file.path.media: /application/media

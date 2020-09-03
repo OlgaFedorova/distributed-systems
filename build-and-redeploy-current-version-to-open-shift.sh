@@ -10,17 +10,17 @@ cd first-service
 sh first-service-push-image.sh $VERSION
 cd ..
 
-cd second-service
-sh second-service-push-image.sh $VERSION
-cd ..
-
-cd first-service-with-sleuth
-sh first-service-with-sleuth-push-image.sh $VERSION
-cd ..
-
-cd second-service-with-sleuth
-sh second-service-with-sleuth-push-image.sh $VERSION
-cd ..
+#cd second-service
+#sh second-service-push-image.sh $VERSION
+#cd ..
+#
+#cd first-service-with-sleuth
+#sh first-service-with-sleuth-push-image.sh $VERSION
+#cd ..
+#
+#cd second-service-with-sleuth
+#sh second-service-with-sleuth-push-image.sh $VERSION
+#cd ..
 
 cd ..
 

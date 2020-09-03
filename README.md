@@ -299,7 +299,21 @@ To  open  up  access  between  projects  you  can  use  the command:
 oc admpod-network
 ```
 
-#### Copying Data from a Volume to local
+#### Copying Data to a Volume
+If you have your application running and a persistent volume mounted, you can copy a directory from your local system into the persistent volume using oc rsync.
+1. determine  the  name  of  the  pod  for  your  application  that  mounts  the  persistent volume:
+```
+oc get pods --selector name=first-service
+```
+2. Copy to Volume
+```
+oc rsync topods/ first-service-2-42xk2:/application/media --no-perms
+```
+3. Copy from Volume
+```
+oc rsync first-service-2-42xk2:/application/media topods --no-perms
+```
+
 
 #### Environment
 ###### Localhost:

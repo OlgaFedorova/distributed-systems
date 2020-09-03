@@ -156,9 +156,29 @@ objects:
                     secretKeyRef:
                       name: first-service-secrets
                       key: TEST_SECRET_CONF_MAP2
-              resources:
-                limits:
-                  memory: 512Mi
+#              resources:
+#                limits:
+#                  memory: 512Mi
+#              readinessProbe:
+#                httpGet:
+#                  path: /first-service/healthy
+#                  port: 8080
+#                  scheme: HTTP
+#                initialDelaySeconds: 60
+#                timeoutSeconds: 30
+#                periodSeconds: 300
+#                successThreshold: 1
+#                failureThreshold: 3
+#              livenessProbe:
+#                httpGet:
+#                  path: /first-service/healthy
+#                  port: 8080
+#                  scheme: HTTP
+#                initialDelaySeconds: 60
+#                timeoutSeconds: 30
+#                periodSeconds: 360
+#                successThreshold: 1
+#                failureThreshold: 3
               volumeMounts:
                 - name: first-service-settings-volume
                   mountPath: /application/settings
@@ -189,7 +209,7 @@ parameters:
     description: "Service name"
     value: first-service
   - name: VERSION
-    description: "Version of Jaeger"
+    description: "Version of first-service"
     required: true
   - name: TEST_ENV_VARIABLE
     description: Test environment variable

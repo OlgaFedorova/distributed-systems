@@ -63,7 +63,7 @@ objects:
             from:
               kind: ImageStreamTag
               name: "${SERVICE_NAME}:${VERSION}"
-      replicas: 2
+      replicas: 1
       selector:
         name: ${SERVICE_NAME}
         deploymentconfig: ${SERVICE_NAME}
